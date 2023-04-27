@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PWA Demo</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
+        crossorigin="anonymous"></script>
+    <link rel="manifest" href="manifest.webmanifest">
+    <!-- <link rel="service" href="sw.js"> -->
+     <script src="sw.js"></script> 
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">PWA</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+                aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="#">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Link</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button"
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                            Dropdown link
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                            <li><a class="dropdown-item" href="#">Action</a></li>
+                            <li><a class="dropdown-item" href="#">Another action</a></li>
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+                            <li><a class="dropdown-item" href="#">Something else here</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="mt-2 mb-4 bg-light rounded-3">
+        <div class="container py-5">
+            <h1 class="display-5 fw-bold">Welcome to PWA</h1>
+            <p class="col-md-8 fs-4">Progressive Web Apps (PWAs) are web apps that use service workers, manifests, and
+                other web-platform features in combination with progressive enhancement to give users an experience on
+                par with native apps.</p>
+            <button class="btn btn-primary btn-lg" type="button">Learn More</button>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">What makes a PWA</h5>
+                        <p class="card-text">Progressive Web Apps (PWA) are built and enhanced with modern APIs to
+                            deliver enhanced capabilities, reliability, and installability while reaching anyone,
+                            anywhere, on any device with a single codebase. To help you create the best possible
+                            experience, use the core and optimal checklists and recommendations to guide you.</p>
+                        <a href="#" class="btn btn-primary">Progressive Web App Checklist </a>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">How Progressive Web Apps can drive business success</h5>
+                        <p class="card-text">Progressive Web Apps are on a lot of companies' roadmap to modernize their
+                            website and adapt to users' new expectations. Like all new concepts and technical
+                            capabilities, they raise questions: is it what my customers want, how much will it grow my
+                            business, what is technically feasible?</p>
+                        <a href="#" class="btn btn-primary">PWAs solve customer needs </a>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <button class="add-button">Add to home screen</button>
+
+
+</body>
+
+<script>
+let deferredPrompt;
+const addBtn = document.querySelector('.add-button');
+addBtn.style.display = 'none';
+
+
+window.addEventListener('beforeinstallprompt', (e) => {
+  // Prevent Chrome 67 and earlier from automatically showing the prompt
+  e.preventDefault();
+  // Stash the event so it can be triggered later.
+  deferredPrompt = e;
+  // Update UI to notify the user they can add to home screen
+  addBtn.style.display = 'block';
+
+  addBtn.addEventListener('click', (e) => {
+    // hide our user interface that shows our A2HS button
+    addBtn.style.display = 'none';
+    // Show the prompt
+    deferredPrompt.prompt();
+    // Wait for the user to respond to the prompt
+    deferredPrompt.userChoice.then((choiceResult) => {
+        if (choiceResult.outcome === 'accepted') {
+          console.log('User accepted the A2HS prompt');
+        } else {
+          console.log('User dismissed the A2HS prompt');
+        }
+        deferredPrompt = null;
+      });
+  });
+});
+</script>
+
+</html>
